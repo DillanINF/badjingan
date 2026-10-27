@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Copy, Check, ArrowUp, Send, Terminal, Sparkles } from 'lucide-react';
+import { Mail, Copy, Check, ArrowUp, Send, Terminal } from 'lucide-react';
 import { sound } from './AudioEngine';
 
 const GithubIcon: React.FC<{ size?: number; className?: string }> = ({ size = 14, className = "" }) => (
@@ -17,9 +17,11 @@ const LinkedinIcon: React.FC<{ size?: number; className?: string }> = ({ size = 
   </svg>
 );
 
-const TwitterIcon: React.FC<{ size?: number; className?: string }> = ({ size = 14, className = "" }) => (
+const InstagramIcon: React.FC<{ size?: number; className?: string }> = ({ size = 14, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
   </svg>
 );
 
@@ -29,36 +31,53 @@ export const ContactSection: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  const emailAddress = "angel.dev@underground.io";
+  const emailAddress = "dilaninf6@gmail.com";
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      setCurrentTime(now.toTimeString().split(' ')[0] + ' UTC' + (now.getTimezoneOffset() <= 0 ? '+' : '-') + Math.abs(now.getTimezoneOffset() / 60));
+      const offset = -now.getTimezoneOffset() / 60;
+      setCurrentTime(
+        now.toTimeString().split(' ')[0] + ' UTC' + (offset >= 0 ? '+' : '-') + Math.abs(offset)
+      );
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = async () => {
     sound.playMechanicalClick();
-    navigator.clipboard.writeText(emailAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    try {
+      await navigator.clipboard.writeText(emailAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      window.location.href = `mailto:${emailAddress}`;
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
     sound.playGlitchBurst();
     setFormStatus('sending');
 
-    setTimeout(() => {
+    try {
+      // Ganti YOUR_FORM_ID dengan ID form dari formspree.io (daftar pakai dilaninf6@gmail.com)
+      const res = await fetch('https://formspree.io/f/mljjbajd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(formState),
+      });
+      if (!res.ok) throw new Error('Failed to send');
       setFormStatus('sent');
       setFormState({ name: '', email: '', message: '' });
       setTimeout(() => setFormStatus('idle'), 4000);
-    }, 1200);
+    } catch {
+      setFormStatus('idle');
+      alert('Message failed to send. Please email me directly at ' + emailAddress);
+    }
   };
 
   const scrollToTop = () => {
@@ -67,17 +86,17 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section 
-      id="contact" 
+    <section
+      id="contact"
       className="relative min-h-screen w-full bg-[#050505] text-white pt-20 pb-10 px-4 md:px-10 border-t border-neutral-800"
     >
       <div className="max-w-7xl mx-auto flex flex-col justify-between min-h-[85vh]">
-        
+
         {/* Main Contact Headline */}
         <div>
           <div className="flex items-center gap-2 font-mono text-xs text-neutral-400 mb-2">
             <span className="w-2 h-2 bg-white" />
-            <span>[SECTION 06 // TRANSMISSION]</span>
+            <span>[SECTION 06 // CONTACT]</span>
           </div>
 
           <h2 className="font-impact text-5xl sm:text-7xl md:text-8xl lg:text-9xl uppercase tracking-tight text-white leading-none">
@@ -89,22 +108,22 @@ export const ContactSection: React.FC = () => {
           </h2>
 
           <p className="font-mono text-xs sm:text-sm text-neutral-300 max-w-2xl mt-6 leading-relaxed">
-            Have a bold design vision, an experimental project, or want to disrupt standard web conventions? Drop a transmission. No boring pitches.
+            Got a project in mind, or just want to talk about the web? Send me a message and I'll get back to you.
           </p>
         </div>
 
-        {/* Transmission Grid: Direct Email & Terminal Form */}
+        {/* Contact Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 my-12 items-start">
-          
-          {/* Left Column: Direct Communication & Magnetic Pill */}
+
+          {/* Left Column */}
           <div className="lg:col-span-5 space-y-6">
-            
-            {/* Quick Copy Email Card */}
+
+            {/* Email Card */}
             <div className="p-6 bg-neutral-950 border border-neutral-800 relative group">
               <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">
-                PRIMARY TRANSMISSION CHANNEL
+                EMAIL
               </div>
-              
+
               <div className="font-mono text-base md:text-lg text-white font-bold tracking-tight mb-4 break-all">
                 {emailAddress}
               </div>
@@ -117,26 +136,26 @@ export const ContactSection: React.FC = () => {
                 {copied ? (
                   <>
                     <Check size={14} className="text-emerald-700" />
-                    <span>COPIED TO CLIPBOARD // OK</span>
+                    <span>COPIED // OK</span>
                   </>
                 ) : (
                   <>
                     <Copy size={14} />
-                    <span>COPY EMAIL TO CLIPBOARD</span>
+                    <span>COPY EMAIL</span>
                   </>
                 )}
               </button>
             </div>
 
-            {/* Social Channels Network */}
+            {/* Social Links */}
             <div className="p-6 bg-neutral-950 border border-neutral-800 font-mono text-xs space-y-3">
               <div className="text-[10px] text-neutral-500 uppercase tracking-widest mb-2">
-                COMMUNICATION RELAYS
+                SOCIALS
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/DillanINF/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick(750)}
@@ -147,7 +166,7 @@ export const ContactSection: React.FC = () => {
                 </a>
 
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/dillan-ilkham-nur-fazry-a4244a26a/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick(800)}
@@ -158,14 +177,14 @@ export const ContactSection: React.FC = () => {
                 </a>
 
                 <a
-                  href="https://twitter.com"
+                  href="https://www.instagram.com/dlan12_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick(850)}
                   className="p-3 border border-neutral-800 hover:border-white hover:text-white transition-all flex items-center gap-2 group text-neutral-300"
                 >
-                  <TwitterIcon size={14} />
-                  <span>X / TWITTER</span>
+                  <InstagramIcon size={14} />
+                  <span>INSTAGRAM</span>
                 </a>
 
                 <a
@@ -179,21 +198,21 @@ export const ContactSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Tactical Distress Stamp */}
+            {/* Status Stamp */}
             <div className="p-4 border border-dashed border-neutral-800 font-mono text-[11px] text-neutral-400 flex items-center justify-between">
-              <span>SECURITY LEVEL: OPEN ARCHIVE</span>
-              <span className="text-white font-bold">PGP VERIFIED</span>
+              <span>CURRENT STATUS</span>
+              <span className="text-white font-bold">AVAILABLE FOR WORK</span>
             </div>
           </div>
 
-          {/* Right Column: Interactive Terminal Contact Form */}
+          {/* Right Column: Contact Form */}
           <div className="lg:col-span-7">
             <div className="p-6 bg-neutral-950 border border-white/20 relative">
-              
+
               <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-6 font-mono text-xs text-neutral-400">
                 <div className="flex items-center gap-2 text-white">
                   <Terminal size={14} />
-                  <span>RELAY_INTERFACE_V2.0</span>
+                  <span>CONTACT_FORM</span>
                 </div>
                 <span>STATUS: READY</span>
               </div>
@@ -201,42 +220,42 @@ export const ContactSection: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
                 <div>
                   <label className="block text-neutral-400 mb-1.5 uppercase tracking-wider text-[11px]">
-                    01 // SENDER IDENTITY [NAME]:
+                    01 // NAME:
                   </label>
                   <input
                     type="text"
                     required
                     value={formState.name}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    placeholder="e.g. John Doe / Studio Syndicate"
+                    placeholder="Your name or company"
                     className="w-full px-4 py-3 bg-black border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-colors"
                   />
                 </div>
 
                 <div>
                   <label className="block text-neutral-400 mb-1.5 uppercase tracking-wider text-[11px]">
-                    02 // RETURN TRANSMISSION [EMAIL]:
+                    02 // EMAIL:
                   </label>
                   <input
                     type="email"
                     required
                     value={formState.email}
                     onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                    placeholder="e.g. client@domain.xyz"
+                    placeholder="you@example.com"
                     className="w-full px-4 py-3 bg-black border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-colors"
                   />
                 </div>
 
                 <div>
                   <label className="block text-neutral-400 mb-1.5 uppercase tracking-wider text-[11px]">
-                    03 // TRANSMISSION PAYLOAD [MESSAGE]:
+                    03 // MESSAGE:
                   </label>
                   <textarea
                     rows={4}
                     required
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                    placeholder="Describe your brief, timeline, or idea..."
+                    placeholder="Tell me about your project, timeline, or idea..."
                     className="w-full px-4 py-3 bg-black border border-neutral-800 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-colors resize-none"
                   />
                 </div>
@@ -245,15 +264,15 @@ export const ContactSection: React.FC = () => {
                   type="submit"
                   disabled={formStatus === 'sending'}
                   data-clickable="true"
-                  className="w-full py-4 bg-white text-black font-mono font-extrabold text-xs tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 border border-white"
+                  className="w-full py-4 bg-white text-black font-mono font-extrabold text-xs tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 border border-white disabled:opacity-60"
                 >
                   {formStatus === 'sending' ? (
-                    <span>ENCRYPTING & DISPATCHING TRANSMISSION...</span>
+                    <span>SENDING...</span>
                   ) : formStatus === 'sent' ? (
-                    <span className="text-emerald-800 font-black">TRANSMISSION RECEIVED // DISPATCH SUCCESSFUL ✓</span>
+                    <span className="text-emerald-800 font-black">MESSAGE SENT ✓</span>
                   ) : (
                     <>
-                      <span>TRANSMIT DISPATCH</span>
+                      <span>SEND MESSAGE</span>
                       <Send size={14} />
                     </>
                   )}
@@ -264,24 +283,23 @@ export const ContactSection: React.FC = () => {
 
         </div>
 
-        {/* Global Footer & Live Telemetry */}
+        {/* Footer */}
         <footer className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between font-mono text-[11px] text-neutral-400 gap-4 select-none">
           <div>
-            <span className="text-white font-bold">ANGEL.DEV</span> // UNDERGROUND PORTFOLIO ARCHIVE © 2024
+            <span className="text-white font-bold">DILLAN.DEV</span> // PORTFOLIO © 2026
           </div>
 
           <div className="flex items-center gap-2 text-neutral-400">
             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            <span>LOCAL SYSTEM TIME: {currentTime || 'SYNCING...'}</span>
+            <span>LOCAL TIME: {currentTime || 'SYNCING...'}</span>
           </div>
 
-          {/* Back to top button */}
           <button
             onClick={scrollToTop}
             data-clickable="true"
             className="flex items-center gap-1.5 hover:text-white transition-colors group"
           >
-            <span>RETURN TO TOP</span>
+            <span>BACK TO TOP</span>
             <ArrowUp size={13} className="group-hover:-translate-y-1 transition-transform" />
           </button>
         </footer>
