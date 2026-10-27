@@ -205,17 +205,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
               hasRevealed ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
-            <img 
-              src="/images/hero-portrait.png" 
-              alt="Developer Monochrome High Contrast Portrait" 
-              className={`preserve-photo w-full h-full object-contain filter contrast-125 brightness-105 group-hover:scale-105 transition-all duration-500 ${
-                glitchActive ? 'filter invert contrast-200' : ''
-              }`}
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)'
-              }}
-            />
+           
 
             {/* Subtle distress photocopy scratch overlay over portrait */}
             <div className="absolute inset-0 bg-transparent mix-blend-screen pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.4),transparent_60%)]" />
