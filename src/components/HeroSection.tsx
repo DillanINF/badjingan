@@ -247,7 +247,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
 
           {/* Brief description: web creation & interactive digital experiences */}
           <p className="max-w-xl mx-auto mt-4 font-mono text-xs sm:text-sm text-neutral-300 leading-relaxed px-4">
-            Engineered at the intersection of brutalist design and uncompromising performance. Building visceral websites, audio-reactive interfaces, and unforgettable web experiences.
+            I'm a frontend developer building websites with a strong visual style, from product landing pages to booking apps. I like dark layouts, bold type, and small interactions that make a page feel alive.
           </p>
 
           {/* EXPLORE MY WORK CTA Button with Magnetic / Grunge Styling */}
