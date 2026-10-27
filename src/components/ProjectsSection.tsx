@@ -72,7 +72,9 @@ export const ProjectsSection: React.FC = () => {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className={`w-full h-full object-cover filter grayscale contrast-150 transition-all duration-700 ease-out group-hover:scale-105 group-hover:contrast-200 ${
+                    loading="lazy"
+                    decoding="async"
+                    className={`preserve-photo w-full h-full object-cover filter grayscale contrast-150 transition-all duration-500 ease-out group-hover:scale-105 group-hover:contrast-200 ${
                       isHovered ? 'brightness-110' : 'brightness-90'
                     }`}
                   />

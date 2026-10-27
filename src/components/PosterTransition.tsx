@@ -92,7 +92,7 @@ export const PosterTransition: React.FC = () => {
       {/* Background Graphic Distressed Poster Image Layer */}
       <div 
         ref={imagePosterRef}
-        className="absolute inset-0 pointer-events-none opacity-30 bg-cover bg-center mix-blend-screen filter grayscale"
+        className="absolute inset-0 pointer-events-none opacity-30 bg-cover bg-center mix-blend-screen filter grayscale will-change-transform"
         style={{
           backgroundImage: "url('/images/creative-developer-poster.jpg')",
         }}
@@ -128,28 +128,28 @@ export const PosterTransition: React.FC = () => {
           
           <div 
             ref={textLine1Ref} 
-            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-white hover:text-neutral-300 transition-colors drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-white hover:text-neutral-300 transition-colors drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] will-change-transform"
           >
             CREATIVE
           </div>
 
           <div 
             ref={textLine2Ref} 
-            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-neutral-200 hover:text-white transition-colors"
+            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-neutral-200 hover:text-white transition-colors will-change-transform"
           >
             DEVELOPER
           </div>
 
           <div 
             ref={textLine3Ref} 
-            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-neutral-300 hover:text-white transition-colors"
+            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-neutral-300 hover:text-white transition-colors will-change-transform"
           >
             AFTER THE
           </div>
 
           <div 
             ref={textLine4Ref} 
-            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-white hover:text-neutral-400 transition-colors"
+            className="w-full text-[14vw] sm:text-[13vw] md:text-[11.5vw] text-white hover:text-neutral-400 transition-colors will-change-transform"
           >
             ORDINARY.
           </div>

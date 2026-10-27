@@ -47,7 +47,7 @@ export const App: React.FC = () => {
       lenis.raf(time * 1000);
     });
 
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     return () => {
       lenis.destroy();
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
   return (
     <div 
       className={`min-h-screen bg-[#050505] text-[#e6e6e6] transition-all duration-300 relative ${
-        isInverted ? 'filter invert contrast-125' : ''
+        isInverted ? 'filter invert contrast-125 is-inverted' : ''
       }`}
     >
       {/* Underground Viewfinder Custom Cursor */}

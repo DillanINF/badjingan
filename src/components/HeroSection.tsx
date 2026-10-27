@@ -9,7 +9,6 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, triggerGlitchSignal }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hasRevealed, setHasRevealed] = useState(false);
   const [glitchActive, setGlitchActive] = useState(false);
 
@@ -17,12 +16,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
   useEffect(() => {
     const timer1 = setTimeout(() => {
       setHasRevealed(true);
-    }, 200);
+    }, 150);
 
     const timer2 = setTimeout(() => {
       setGlitchActive(true);
-      setTimeout(() => setGlitchActive(false), 600);
-    }, 800);
+      setTimeout(() => setGlitchActive(false), 500);
+    }, 700);
 
     return () => {
       clearTimeout(timer1);
@@ -39,13 +38,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
     }
   }, [triggerGlitchSignal]);
 
-  // Subtle mouse parallax
+  // High-performance hardware-accelerated mouse parallax via CSS variables (0 React re-renders)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
+    const x = ((e.clientX - rect.left) / rect.width - 0.5).toFixed(3);
+    const y = ((e.clientY - rect.top) / rect.height - 0.5).toFixed(3);
+    containerRef.current.style.setProperty('--mx', x);
+    containerRef.current.style.setProperty('--my', y);
   };
 
   return (
@@ -53,15 +53,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
       id="hero"
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen w-full bg-[#050505] text-white flex flex-col justify-between overflow-hidden pt-20 pb-8 px-4 md:px-10 border-b border-neutral-800 select-none"
+      className="relative min-h-screen w-full bg-[#050505] text-white flex flex-col justify-between overflow-hidden pt-20 pb-8 px-4 md:px-10 border-b border-neutral-800 select-none will-change-transform"
+      style={{
+        '--mx': '0',
+        '--my': '0',
+      } as React.CSSProperties}
     >
       {/* Background Graphic Noise & Distressed Image Texture */}
       <div 
-        className="absolute inset-0 z-0 opacity-20 pointer-events-none bg-cover bg-center filter grayscale contrast-150"
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none bg-cover bg-center filter grayscale contrast-150 will-change-transform"
         style={{
           backgroundImage: "url('/images/hero-portrait.png')",
-          transform: `scale(1.05) translate3d(${mousePos.x * -15}px, ${mousePos.y * -15}px, 0)`,
-          transition: 'transform 0.2s ease-out'
+          transform: 'scale(1.05) translate3d(calc(var(--mx) * -15px), calc(var(--my) * -15px), 0)',
         }}
       />
 
@@ -153,11 +156,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
         
         {/* Backdrop Distorted Gothic Text: "seen this Angel?" */}
         <div 
-          className={`absolute pointer-events-none select-none text-center transition-all duration-1000 ${
+          className={`absolute pointer-events-none select-none text-center transition-all duration-1000 will-change-transform ${
             glitchActive ? 'filter invert contrast-200' : ''
           }`}
           style={{
-            transform: `translate3d(${mousePos.x * 25}px, ${mousePos.y * 20}px, 0)`,
+            transform: 'translate3d(calc(var(--mx) * 25px), calc(var(--my) * 20px), 0)',
           }}
         >
           <div className="relative">
@@ -182,10 +185,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
 
         {/* Developer High-Contrast Monochrome Portrait (Image 2 cutout/framing) */}
         <div 
-          className="relative z-10 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] lg:max-w-[480px] aspect-[3/4] flex items-end justify-center group"
+          className="relative z-10 w-full max-w-[280px] sm:max-w-[340px] md:max-w-[420px] lg:max-w-[480px] aspect-[3/4] flex items-end justify-center group hero-photo-container will-change-transform"
           style={{
-            transform: `translate3d(${mousePos.x * -10}px, ${mousePos.y * -8}px, 0)`,
-            transition: 'transform 0.15s ease-out'
+            transform: 'translate3d(calc(var(--mx) * -10px), calc(var(--my) * -8px), 0)',
           }}
         >
           {/* Distressed Tape / Grunge Badge Behind portrait */}
@@ -199,19 +201,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreClick, trigge
 
           {/* Portrait Image with High Contrast Filter and Mask Reveal */}
           <div 
-            className={`relative w-full h-full overflow-hidden transition-all duration-1000 ${
-              hasRevealed ? 'opacity-100 scale-100 clip-path-full' : 'opacity-0 scale-95'
+            className={`relative w-full h-full overflow-hidden transition-all duration-700 ${
+              hasRevealed ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
             <img 
               src="/images/hero-portrait.png" 
               alt="Developer Monochrome High Contrast Portrait" 
-              className={`w-full h-full object-contain filter contrast-125 brightness-105 group-hover:scale-105 transition-all duration-700 ${
+              className={`preserve-photo w-full h-full object-contain filter contrast-125 brightness-105 group-hover:scale-105 transition-all duration-500 ${
                 glitchActive ? 'filter invert contrast-200' : ''
               }`}
               style={{
-                maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
+                maskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black 82%, transparent 100%)'
               }}
             />
 

@@ -33,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <span className="inline-block w-2.5 h-2.5 bg-white group-hover:scale-125 transition-transform animate-pulse" />
             <span className="font-impact text-lg md:text-xl tracking-normal text-white">ANGEL.DEV</span>
-            <span className="text-[10px] text-neutral-400 hidden sm:inline">[PORTFOLIO // 2024]</span>
+            <span className="text-[10px] text-neutral-400 hidden sm:inline">[PORTFOLIO // 2026]</span>
           </a>
 
           <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 border border-white/20 bg-black/40 text-[10px] text-neutral-300">

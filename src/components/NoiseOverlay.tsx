@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface NoiseOverlayProps {
   grainIntensity: 'low' | 'medium' | 'high' | 'off';
   showScanlines: boolean;
 }
 
-export const NoiseOverlay: React.FC<NoiseOverlayProps> = ({ grainIntensity, showScanlines }) => {
+export const NoiseOverlay: React.FC<NoiseOverlayProps> = memo(({ grainIntensity, showScanlines }) => {
   if (grainIntensity === 'off' && !showScanlines) return null;
 
   const opacityMap = {
@@ -17,7 +17,7 @@ export const NoiseOverlay: React.FC<NoiseOverlayProps> = ({ grainIntensity, show
 
   return (
     <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden select-none">
-      {/* SVG Turbulence Grain Generator */}
+      {/* High-performance GPU accelerated film grain */}
       {grainIntensity !== 'off' && (
         <div 
           className="film-grain" 
@@ -37,4 +37,6 @@ export const NoiseOverlay: React.FC<NoiseOverlayProps> = ({ grainIntensity, show
       <div className="absolute inset-0 border-[6px] md:border-[12px] border-black/80 pointer-events-none" />
     </div>
   );
-};
+});
+
+NoiseOverlay.displayName = 'NoiseOverlay';

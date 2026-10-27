@@ -56,7 +56,7 @@ export const AboutSection: React.FC = () => {
               <img 
                 src="/images/hero-portrait.png" 
                 alt="Angel Developer Monochrome Portrait" 
-                className={`w-full h-full object-cover transition-all duration-300 filter ${
+                className={`preserve-photo w-full h-full object-cover transition-all duration-300 filter ${
                   photoInvert ? 'invert contrast-200' : 'contrast-125 grayscale group-hover:scale-105'
                 }`}
               />
